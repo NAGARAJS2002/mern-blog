@@ -20,13 +20,13 @@ export default function SignIn() {
     <input type="email"
     id="email"
     placeholder='name@gmail.com'
-       className=' border p-2 rounded-lg'
+       className=' border p-2 rounded-lg outline-none focus:border-cyan-500'
      />
 
     <input type="password"
     id="password"
     placeholder='*****'
-       className=' border p-2 rounded-lg'
+       className=' border p-2 rounded-lg outline-none focus:border-cyan-500'
     />
     <button className='border p-2 rounded-lg  bg-gradient-to-r from-purple-500 to-pink-500 text-white '>Sign In</button>
   </form>
