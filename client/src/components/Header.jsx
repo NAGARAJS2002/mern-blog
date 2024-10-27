@@ -1,9 +1,12 @@
 
 
-import React from 'react'
+import React, { useState } from 'react'
 import { AiOutlineSearch} from 'react-icons/ai';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 export default function Header() {
+  const { currentUser } = useSelector((state) => state.user);
+  const [avatarToogle , setAvatarToogle] = useState(false)
   return (
     <header className='border-b-2'>
       <div className='flex justify-between items-center max-w-7xl mx-auto p-3'>
@@ -29,11 +32,31 @@ export default function Header() {
         </form>
 
 
-        <ul className='flex gap-4'>
-        <Link to={'/sign-in'}>
-        <li className=' border-2 px-5 py-2 items-center cursor-pointer rounded-md border-x-purple-500 border-y-blue-500 hover:bg-gradient-to-r from-purple-500 to-blue-500 hover:text-white'> Sign in</li>
-        </Link>
+  <ul className='flex gap-4'>
+ 
+      {currentUser ? (
+        <>
+        <img
+        onClick={(() => setAvatarToogle(!avatarToogle))}
+          className=' relative rounded-full h-10 w-10 object-cover cursor-pointer'
+          src={currentUser.avatar}
+          alt='profile'
+        />
+          {
+          avatarToogle &&  <ul className='absolute top-16 right-36 shadow-lg py-2 text-sm  rounded-lg'>
+          <li className='flex  flex-col p-3 border cursor-pointer'>{currentUser.username}<span className='font-semibold'>{currentUser.email}</span></li>
+          <Link to={'/profile'}><li onClick={(() => setAvatarToogle(!avatarToogle))} className='p-3 border hover:bg-slate-50'>Profile</li></Link>
+          <li className='p-3 border hover:bg-slate-50'>User post</li>
+          <li className='p-2 cursor-pointer hover:bg-slate-50'>SignOut</li>
         </ul>
+         }
+        </>
+      ) : (
+        <li className=' text-slate-700 hover:underline'> Sign in</li>
+      )}
+  
+  </ul>
+
       </div>
     </header>
   )
