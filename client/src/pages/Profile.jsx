@@ -9,7 +9,7 @@ export default function Profile() {
  const [file,setFile] = useState(undefined);
  const [filePerc,setFilePerc] = useState(0);
  const [fileError,setFileError] = useState(false);
- const [formData,setFormData] = useState(false);
+ const [formData,setFormData] = useState({});
 
  useEffect(() => {
   if (file) {
@@ -43,11 +43,18 @@ const handleFileUpload = (file) => {
   );
 };
 
+
+function handleChange(e) {
+  setFormData({
+   ...formData,
+   [e.target.id]:e.target.value
+  });
+}
  
   return (
    <div className='max-w-lg mx-auto p-3 w-full'>
          <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-         <form className='flex flex-col gap-4'>
+         <form  className='flex flex-col gap-4'>
           <input type="file" 
            ref={fileRef}
            className='hidden'
@@ -77,7 +84,7 @@ const handleFileUpload = (file) => {
 
         <input type="text" onChange={handleChange} id='email'    
          className='border p-2 rounded-lg outline-none focus:border-cyan-400' />
-         
+
         <input type="text" onChange={handleChange} id='password' 
          className='border p-2 rounded-lg outline-none focus:border-cyan-400' />
 
