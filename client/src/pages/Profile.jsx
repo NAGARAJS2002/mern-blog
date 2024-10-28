@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
-import { useSelector } from 'react-redux'
+import { useSelector ,useDispatch} from 'react-redux';
+import{deleteUserFailure,deleteUserSuccess,deleteUserStart} from "../redux/user/userSlice.js"
 import {app} from "../firebase"
-import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage"
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 export default function Profile() {
- const {currentUser} = useSelector(state => state.user);
+ const {currentUser,error,loading} = useSelector(state => state.user);
  const fileRef = useRef(null);
+ const dispatch = useDispatch();
  const [file,setFile] = useState(undefined);
  const [filePerc,setFilePerc] = useState(0);
  const [fileError,setFileError] = useState(false);
@@ -44,6 +46,25 @@ const handleFileUpload = (file) => {
 };
 
 
+const handleDeleteUser = async (e) => {
+   e.preventDefault();
+   dispatch(deleteUserStart())
+   try {
+    const res = await fetch(`api/user/delete/${currentUser._id}`,{
+      method: 'DELETE'
+    });
+    const data = await res.json();
+    if (data.success=== false) {
+      dispatch(deleteUserFailure(data.message))
+      return;
+    }
+    dispatch(deleteUserSuccess(data))
+   } catch (error) {
+    dispatch(deleteUserFailure(error.message))
+   }
+}
+
+
 function handleChange(e) {
   setFormData({
    ...formData,
@@ -58,6 +79,7 @@ function handleChange(e) {
           <input type="file" 
            ref={fileRef}
            className='hidden'
+             accept='image/*'
            onChange={(e) => setFile(e.target.files[0])}
             />
          <img
@@ -94,6 +116,7 @@ function handleChange(e) {
         <span
           
           className='text-red-700 cursor-pointer'
+          onClick={handleDeleteUser}
         >
           Delete account
         </span>
@@ -101,6 +124,7 @@ function handleChange(e) {
           Sign out
         </span>
       </div>
+      <p className='text-red-700'>{error?error:""}</p>
    </div>
   )
 }
