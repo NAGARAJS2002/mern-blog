@@ -2,14 +2,30 @@
 
 import React, { useState } from 'react'
 import { AiOutlineSearch} from 'react-icons/ai';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaUser } from "react-icons/fa";
 import { HiDocumentText} from "react-icons/hi"
 import { FaPlus } from "react-icons/fa6";
+import{signOutStart , deleteUserFailure , deleteUserSuccess} from "../redux/user/userSlice.js"
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
-  const [avatarToogle , setAvatarToogle] = useState(false)
+  const [avatarToogle , setAvatarToogle] = useState(false);
+  const dispatch = useDispatch()
+  const handleUserSignOut =async  () => {
+    try {
+      dispatch(signOutStart());
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+      }
+      dispatch(deleteUserSuccess(data))
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message))
+    }
+  }
+  
   return (
     <header className='border-b-2'>
       <div className='flex justify-between items-center max-w-7xl mx-auto p-3'>
@@ -51,7 +67,7 @@ export default function Header() {
           <Link to={'/profile'}><li onClick={(() => setAvatarToogle(!avatarToogle))} 
           className='p-3 flex  items-center gap-2 border hover:bg-slate-50'><span><FaUser/></span>Profile</li></Link>
           <li className='p-3 flex  cursor-pointer items-center gap-2 border hover:bg-slate-50'><span className='text-lg'><HiDocumentText/></span>post</li>
-          <li className='p-3 flex items-center gap-2 cursor-pointer hover:bg-slate-50'><span><FaPlus/></span>SignOut</li>
+          <li onClick={handleUserSignOut} className='p-3 flex items-center gap-2 cursor-pointer hover:bg-slate-50'><span><FaPlus/></span>SignOut</li>
         </ul>
          }
         </>
