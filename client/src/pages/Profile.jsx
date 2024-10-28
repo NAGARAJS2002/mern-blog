@@ -102,12 +102,12 @@ function handleChange(e) {
           )}
           </p>
         <input type="text" onChange={handleChange} id='username' 
+         className='border p-2 rounded-lg outline-none focus:border-cyan-400' defaultValue={currentUser.username} />
+
+        <input type="text" onChange={handleChange} id='email'   defaultValue={currentUser.email}  
          className='border p-2 rounded-lg outline-none focus:border-cyan-400' />
 
-        <input type="text" onChange={handleChange} id='email'    
-         className='border p-2 rounded-lg outline-none focus:border-cyan-400' />
-
-        <input type="text" onChange={handleChange} id='password' 
+        <input type="text" onChange={handleChange} id='password' placeholder='*****'
          className='border p-2 rounded-lg outline-none focus:border-cyan-400' />
 
          <button className='border-t-2 border-b border-r border-l p-2 rounded-lg border-x-purple-700 border-y-blue-300 hover:bg-gradient-to-b from-purple-500 to-blue-300 hover:text-white'  >Update</button>
