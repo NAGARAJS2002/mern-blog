@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
 import { useSelector ,useDispatch} from 'react-redux';
+import { Link } from 'react-router-dom';
 import{deleteUserFailure,
   deleteUserSuccess,
   deleteUserStart,
@@ -118,7 +119,7 @@ function handleChange(e) {
 }
  
   return (
-   <div className='max-w-lg mx-auto p-3 w-full'>
+   <div className='p-3 max-w-lg mx-auto  w-full'>
          <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
          <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <input type="file" 
@@ -157,6 +158,7 @@ function handleChange(e) {
 
          <button className='border-t-2 border-b border-r border-l p-2 rounded-lg border-x-purple-700 border-y-blue-300 hover:bg-gradient-to-b from-purple-500 to-blue-300 hover:text-white'  >{loading ? "Loading...":"Update"}</button>
          </form>
+       <Link to={'/post'}>    <button className='border-2 p-2 mt-4 rounded-lg w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white '>CreatePost</button></Link>
          <div className='flex justify-between mt-5'>
         <span
           

@@ -5,6 +5,7 @@ import SignIn from "./pages/SignIn"
 import Header from './components/Header'
 import PrivateRouter from "./components/PrivateRouter"
 import Profile from './pages/Profile'
+import CreatePost from './pages/CreatePost'
 export default function App() {
   return (
    <BrowserRouter>
@@ -14,6 +15,7 @@ export default function App() {
     <Route path='/sign-in' element={<SignIn/>} />
     <Route element={<PrivateRouter/>}>
      <Route path='/profile' element={<Profile/>} />
+     <Route path='/post' element={<CreatePost/>}/>
     </Route>
    </Routes>
    </BrowserRouter>
