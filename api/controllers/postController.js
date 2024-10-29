@@ -11,7 +11,7 @@ export const createPost = async (req,res,next) => {
          title:title,
          content:content,
          category:category,
-         image:image,
+         image: image,
         userId:req.user.id,
     });
 
