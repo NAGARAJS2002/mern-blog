@@ -158,7 +158,7 @@ function handleChange(e) {
 
          <button className='border-t-2 border-b border-r border-l p-2 rounded-lg border-x-purple-700 border-y-blue-300 hover:bg-gradient-to-b from-purple-500 to-blue-300 hover:text-white'  >{loading ? "Loading...":"Update"}</button>
          </form>
-       <Link to={'/post'}>    <button className='border-2 p-2 mt-4 rounded-lg w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white '>CreatePost</button></Link>
+       <Link to={'/post'}>    <button className='border-2 p-2 mt-4 rounded-lg w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white '>Create a post</button></Link>
          <div className='flex justify-between mt-5'>
         <span
           
