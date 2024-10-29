@@ -1,4 +1,5 @@
 import { errorHandler } from "../../utils/error.js";
+import Post from "../model/postModel.js";
 import User from "../model/userModel.js";
 import bcryptjs from "bcryptjs"
 
@@ -44,3 +45,16 @@ export const updateUser = async (req, res, next) => {
     }
   };
  
+
+ export const getUserPost =  async (req,res,next) => {
+    if (req.user.id === req.params.id) {
+      try {
+        const Posts = await Post({userId:req.params.id});
+        res.status(201).json(Posts);
+      } catch (error) {
+        next(error)
+      }
+    }else{
+      next(errorHandler(401,'your can only view own post'))
+    }
+  }
