@@ -1,7 +1,57 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import {app} from "../firebase.js"
+import { getDownloadURL, getStorage, ref, uploadBytesResumable, } from "firebase/storage"
 export default function CreatePost() {
+  const [file , setFile] = useState(null);
+  const [imageUploadError,setImageUploadError] = useState(null)
+  const [imageUploadProgress,setImageUploadProgress] = useState(null)
+  const [formData,setFormData] = useState({});
+  console.log(formData);
+  
+
+const handleUpdloadImage = () => {
+  try {
+    
+   if (!file) {
+      setImageUploadError('please select image');
+      return;
+   }
+   const  storage =  getStorage(app);
+   const fileName = new Date().getTime() + '-' + file.name;
+   const storageRef = ref(storage,fileName);
+   const uploadTask = uploadBytesResumable(storageRef, file);
+
+   uploadTask.on('state_changed', (snapshot) => {
+    const progress = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+     setImageUploadProgress(progress.toFixed(0));
+       
+   },
+   (error) => {
+    setImageUploadError('Image upload failed');
+    setImageUploadProgress(null);
+  },
+  () => {
+    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      setImageUploadProgress(null);
+      setImageUploadError(null);
+      setFormData({ ...formData, image: downloadURL });
+    });
+  }
+);
+} 
+   
+   catch (error) {
+    setImageUploadError('image upload filed')
+    setImageUploadProgress(null)
+    console.log(error);
+    
+  }
+}
+
+
+
   return (
  
 <div className='p-3 max-w-3xl mx-auto min-h-screen'>
@@ -13,8 +63,15 @@ export default function CreatePost() {
             placeholder='Title'
             required
             id='title'
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
             className='flex-1 border p-2 rounded-lg '/>
-          <select className='border rounded-lg outline-none'>
+          <select 
+          onChange={(e) =>
+            setFormData({ ...formData, category: e.target.value })
+          }
+          className='border rounded-lg outline-none'>
             <option value='uncategorized'>Select a category</option>
             <option value='javascript'>JavaScript</option>
             <option value='reactjs'>React.js</option>
@@ -26,15 +83,37 @@ export default function CreatePost() {
             type='file'
             accept='image/*'
             className='rounded-lg border p-1'
+            onChange={(e) => setFile(e.target.files[0])}
           />
-          <button type='button' className='border p-1 border-x-blue-500 via-purple-500 border-y-pink-500 rounded-md' >
-        Upload Image </button>
+          <button disabled={imageUploadProgress} onClick={handleUpdloadImage} type='button' className='border p-1 border-x-blue-500 via-purple-500 border-y-pink-500 rounded-md' >
+          {imageUploadProgress ? (
+          
+          
+            <div className='w-20 h-10'> 
+               <p className='text-blue-500 font-semibold text-xl'>{`${imageUploadProgress || 0}%`}</p>
+            </div>
+        
+            ) : (
+              'Upload Image'
+            )}
+         </button>
         </div>
+        {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
+        {formData.image && (
+          <img
+            src={formData.image}
+            alt='upload'
+            className='w-full h-72 object-cover'
+          />
+        )}
         <ReactQuill
           theme='snow'
           placeholder='Write something...'
           className='h-72 mb-12'
           required
+          onChange={(value) => {
+            setFormData({ ...formData, content: value });
+          }}
         />
         <button type='submit' className='p-2 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white'>
           Publish
