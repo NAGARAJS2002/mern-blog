@@ -21,6 +21,8 @@ export default function Profile() {
  const [filePerc,setFilePerc] = useState(0);
  const [fileError,setFileError] = useState(false);
  const [formData,setFormData] = useState({});
+ const [showPostsError,setShowPostsError] = useState(false)
+ const [userPosts,setUserPosts] = useState(false)
 
  useEffect(() => {
   if (file) {
@@ -132,7 +134,7 @@ function handleChange(e) {
           src={formData.avatar|| currentUser.avatar}
           alt='profile'
           onClick={(()=>fileRef.current.click())}
-          className='rounded-full h-28 w-28 object-cover cursor-pointer self-center mt-2'
+          className='rounded-full h-28 w-28 object-cover cursor-pointer self-center mt-2 '
         />
        <p className='text-sm self-center'>
           {fileError ? (
@@ -158,7 +160,8 @@ function handleChange(e) {
 
          <button className='border-t-2 border-b border-r border-l p-2 rounded-lg border-x-purple-700 border-y-blue-300 hover:bg-gradient-to-b from-purple-500 to-blue-300 hover:text-white'  >{loading ? "Loading...":"Update"}</button>
          </form>
-       <Link to={'/post'}>    <button className='border-2 p-2 mt-4 rounded-lg w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white '>Create a post</button></Link>
+       <Link to={'/create-post'}>    <button className='border-2 p-2 mt-4 rounded-lg w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white '>Create a post</button></Link>
+       
          <div className='flex justify-between mt-5'>
         <span
           

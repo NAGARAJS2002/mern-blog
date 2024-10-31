@@ -45,16 +45,15 @@ export const updateUser = async (req, res, next) => {
     }
   };
  
-
- export const getUserPost =  async (req,res,next) => {
-    if (req.user.id === req.params.id) {
+  export const getUserPosts = async (req, res, next) => {
+    if (req.user?.id === req.params.id) {  // Ensure req.user is defined
       try {
-        const Posts = await Post({userId:req.params.id});
-        res.status(201).json(Posts);
+        const posts = await Post.find({   userId: req.params.id });
+        return res.status(200).json(posts); // Add return to prevent further execution
       } catch (error) {
-        next(error)
+        return next(error); // Proper error handling
       }
-    }else{
-      next(errorHandler(401,'your can only view own post'))
+    } else {
+      return next(errorHandler(401, 'You can only view your own posts!')); // Corrected typo
     }
-  }
+  };

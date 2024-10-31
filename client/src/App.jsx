@@ -6,18 +6,25 @@ import Header from './components/Header'
 import PrivateRouter from "./components/PrivateRouter"
 import Profile from './pages/Profile'
 import CreatePost from './pages/CreatePost'
-import Post from './pages/Post'
+import Posts from './pages/posts'
+import Projects from './pages/Projects'
+import Home from './pages/Home'
+import About from './pages/About'
 export default function App() {
+  
   return (
    <BrowserRouter>
    <Header/>
    <Routes>
+   <Route path='/' element={<Home/>} />
+   <Route path='/about' element={<About/>} />
+    <Route path='/projects' element={<Projects/>} />
     <Route path='/sign-up' element={<SignUp/>} />
     <Route path='/sign-in' element={<SignIn/>} />
-    <Route path='/post/postId' element={<Post/>} />
     <Route element={<PrivateRouter/>}>
      <Route path='/profile' element={<Profile/>} />
-     <Route path='/post' element={<CreatePost/>}/>
+     <Route path='/create-post' element={<CreatePost/>}/>
+     <Route path='/posts' element={<Posts/>} />
     </Route>
    </Routes>
    </BrowserRouter>

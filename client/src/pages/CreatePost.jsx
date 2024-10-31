@@ -72,7 +72,7 @@ try {
   }
   if (res.ok) {
     setPublishError(null)
-    navigate(`/post`)
+    navigate(`/posts`)
   }
 } catch (error) {
   
@@ -107,18 +107,18 @@ try {
             <option value='nextjs'>Next.js</option>
           </select>
         </div>
-        <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
+        <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted  p-2'>
           <input
             type='file'
             accept='image/*'
-            className='rounded-lg border p-1'
+            className=' rounded-md border p-1'
             onChange={(e) => setFile(e.target.files[0])}
           />
-          <button disabled={imageUploadProgress} onClick={handleUpdloadImage} type='button' className='border p-1 border-x-blue-500 via-purple-500 border-y-pink-500 rounded-md' >
+          <button disabled={imageUploadProgress} onClick={handleUpdloadImage} type='button' className='border  py-2 border-x-blue-500 via-purple-500 border-y-pink-500 rounded-md' >
           {imageUploadProgress ? (
           
           
-            <div className='w-20 h-10'> 
+            <div> 
                <p className='text-blue-500 font-semibold text-xl'>{`${imageUploadProgress || 0}%`}</p>
             </div>
         
@@ -144,7 +144,7 @@ try {
             setFormData({ ...formData, content: value });
           }}
         />
-        <button type='submit'  className='p-2 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white'>
+        <button type='submit'  className='p-2 mt-3 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white'>
           Publish
         </button>
     
