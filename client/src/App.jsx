@@ -10,6 +10,7 @@ import Posts from './pages/posts'
 import Projects from './pages/Projects'
 import Home from './pages/Home'
 import About from './pages/About'
+import SinglePost from './components/SinglePost'
 export default function App() {
   
   return (
@@ -26,6 +27,7 @@ export default function App() {
      <Route path='/create-post' element={<CreatePost/>}/>
      <Route path='/posts' element={<Posts/>} />
     </Route>
+    <Route path='/post' element={<SinglePost/>}/>
    </Routes>
    </BrowserRouter>
   )
