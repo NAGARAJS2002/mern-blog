@@ -105,7 +105,7 @@ export default function posts() {
                     </span>
                   </Table.Cell>
                   <Table.Cell>
-                    <Link
+                    <Link to='/update-post'
                       className='text-teal-500 hover:underline'
                    
                     >

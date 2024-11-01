@@ -1,18 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {app} from "../firebase.js"
 import { getDownloadURL, getStorage, ref, uploadBytesResumable, } from "firebase/storage";
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-export default function CreatePost() {
+import { useNavigate, useParams } from 'react-router-dom';
+export default function UpdatePost() {
   const [file , setFile] = useState(null);
   const [imageUploadError,setImageUploadError] = useState(null)
   const [imageUploadProgress,setImageUploadProgress] = useState(null)
   const [formData,setFormData] = useState({});
-  const [publishError,setPublishError] = useState(false)
+  const [publishError,setPublishError] = useState(false);
+  const {currentUser} = useSelector(state => state.user);
+  const [userPosts ,setUserPosts] = useState([]);
   const navigate = useNavigate()
+  const params = useParams()
   console.log(formData);
+
+
+
+
+
+
 
 const handleUpdloadImage = () => {
   try {
@@ -91,11 +100,13 @@ try {
             placeholder='Title'
             required
             id='title'
+         
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
             className='flex-1 border p-2 rounded-lg '/>
           <select 
+     
           onChange={(e) =>
             setFormData({ ...formData, category: e.target.value })
           }
@@ -135,6 +146,7 @@ try {
           />
         )}
         <ReactQuill
+  
           theme='snow'
           placeholder='Write something...'
           className='h-72 mb-12'
@@ -160,4 +172,3 @@ try {
 
   )
 }
-
