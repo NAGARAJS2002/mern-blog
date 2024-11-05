@@ -35,3 +35,32 @@ export const deletePost = async (req,res,next) => {
   }
 
 
+export const getPost = async (req,res,next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return next(errorHandler(404,'post not found'))
+    }
+    res.status(200).json(post)
+  } catch (error) {
+    next(error)
+  } 
+}
+
+export const updatePost = async (req,res,next) => {
+    const post = await Post.findById(req.params.id);
+    if(!post){
+        return next(errorHandler(404,'post not found' ));
+}
+if(req.user.id !== post.userId){
+    return next(errorHandler(401, 'You can only update your own listings!'));
+}
+
+try{
+    const  updatedpost = await Post.findByIdAndUpdate(req.params.id, req.body, {new: true});
+   res.status(200).json(updatedpost);
+}catch (err){
+    next(err);
+}
+
+}

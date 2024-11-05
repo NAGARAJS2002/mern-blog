@@ -9,15 +9,38 @@ export default function UpdatePost() {
   const [file , setFile] = useState(null);
   const [imageUploadError,setImageUploadError] = useState(null)
   const [imageUploadProgress,setImageUploadProgress] = useState(null)
-  const [formData,setFormData] = useState({});
-  const [publishError,setPublishError] = useState(false);
-  const {currentUser} = useSelector(state => state.user);
-  const [userPosts ,setUserPosts] = useState([]);
+  const [formData,setFormData] = useState({
+   
+
+    });
+  const [publishError,setPublishError] = useState(null)
+  const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate()
-  const params = useParams()
-  console.log(formData);
+  const {id} = useParams()
+  
 
 
+
+useEffect(() => {
+  try {
+    const fetchPost = async () => {
+      const res = await fetch(`/api/post/get/${id}`);
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
+      if (res.ok) {
+        setPublishError(null);
+        setFormData(data);
+      }
+    };
+
+    fetchPost();
+  } catch (error) {
+    console.log(error.message);
+  }
+}, [id]);
 
 
 
@@ -62,16 +85,15 @@ const handleUpdloadImage = () => {
   }
 }
 
-
 const handleSubmit = async (e) => {
   e.preventDefault();
 try {
-  const res = await fetch('/api/post/create',{
+  const res = await fetch(`/api/post/update/${formData._id}/${currentUser._id}`,{
     method: 'POST',
     headers:{
       'Content-Type': "application/json"
     },
-    body: JSON.stringify(formData ),
+    body: JSON.stringify(formData),
   })
   const data = await res.json();
   if (!res.ok) {
@@ -80,33 +102,33 @@ try {
   }
   if (res.ok) {
     setPublishError(null)
-    navigate(`/posts`)
+    navigate(`/post/${data._id}`)
   }
 } catch (error) {
-  
+  setPublishError(error.message)
 }
 }
-
 
 
   return (
  
 <div className='p-3 max-w-3xl mx-auto min-h-screen'>
-      <h1 className='text-center text-3xl my-7 font-semibold'>Create a post</h1>
+      <h1 className='text-center text-3xl my-7 font-semibold'>Update Post</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4' >
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <input
+          
+          value={formData.title}
             type='text'
             placeholder='Title'
             required
             id='title'
-         
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
             className='flex-1 border p-2 rounded-lg '/>
           <select 
-     
+          value={formData.category}
           onChange={(e) =>
             setFormData({ ...formData, category: e.target.value })
           }
@@ -146,7 +168,7 @@ try {
           />
         )}
         <ReactQuill
-  
+        value={formData.content}
           theme='snow'
           placeholder='Write something...'
           className='h-72 mb-12'
@@ -156,7 +178,7 @@ try {
           }}
         />
         <button type='submit'  className='p-2 mt-3 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white'>
-          Publish
+         Update post
         </button>
     
       </form>
@@ -172,3 +194,4 @@ try {
 
   )
 }
+
