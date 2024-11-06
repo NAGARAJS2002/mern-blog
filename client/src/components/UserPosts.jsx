@@ -6,6 +6,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 export default function UserPosts() {
     const {currentUser} = useSelector(state => state.user);
+    const [postIdToDelete,setPostIdToDelete] = useState('')
     const [userPosts , setUserPosts] = useState([]);
     const [showMore, setShowMore] = useState(true);
     const [showModal, setShowModal] = useState(false)
@@ -49,6 +50,27 @@ export default function UserPosts() {
     }
    }
 
+   const handleDeletePost = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
+        {
+          method: 'DELETE',
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setUserPosts((prev) =>
+          prev.filter((post) => post._id !== postIdToDelete)
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
 
   return (
@@ -139,7 +161,7 @@ export default function UserPosts() {
             Are you sure you want to delete this post?
           </h3>
           <div className='flex justify-center gap-4'>
-            <Button color='failure' >
+            <Button onClick={handleDeletePost} color='failure' >
               Yes, I'm sure
             </Button>
             <Button color='gray' onClick={() => setShowModal(false)}>
