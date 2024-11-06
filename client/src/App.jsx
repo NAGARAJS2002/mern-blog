@@ -9,6 +9,7 @@ import CreatePost from './pages/CreatePost'
 import Projects from './pages/Projects'
 import Home from './pages/Home'
 import About from './pages/About'
+import UserPosts from './components/UserPosts'
 
 export default function App() {
   
@@ -24,6 +25,7 @@ export default function App() {
     <Route element={<PrivateRouter/>}>
      <Route path='/profile' element={<Profile/>} />
      <Route path='/create-post' element={<CreatePost/>}/>
+     <Route path='/user-post' element={<UserPosts/>}/>
     </Route>
   
    </Routes>

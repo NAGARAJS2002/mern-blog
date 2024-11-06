@@ -53,7 +53,7 @@ export default function Header() {
             <Link to={'/profile'}>
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
-            <Link to={'/posts'}>
+            <Link to={'/user-post'}>
               <Dropdown.Item>Posts</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
