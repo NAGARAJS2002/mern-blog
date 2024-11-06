@@ -5,79 +5,77 @@ import {app} from "../firebase.js"
 import { getDownloadURL, getStorage, ref, uploadBytesResumable, } from "firebase/storage";
 import { useNavigate } from 'react-router-dom';
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
+import {CircularProgressbar} from "react-circular-progressbar";
+import 'react-circular-progressbar/dist/styles.css';
 export default function CreatePost() {
-  const [file , setFile] = useState(null);
-  const [imageUploadError,setImageUploadError] = useState(null)
-  const [imageUploadProgress,setImageUploadProgress] = useState(null)
-  const [formData,setFormData] = useState({});
-  const [publishError,setPublishError] = useState(false)
-  const navigate = useNavigate()
-  console.log(formData);
+  const [file, setFile] = useState(null);
+  const [imageUploadProgress, setImageUploadProgress] = useState(null);
+  const [imageUploadError, setImageUploadError] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [publishError, setPublishError] = useState(null);
 
-const handleUpdloadImage = () => {
-  try {
-    
-   if (!file) {
-      setImageUploadError('please select image');
-      return;
-   }
-   const  storage =  getStorage(app);
-   const fileName = new Date().getTime() + '-' + file.name;
-   const storageRef = ref(storage,fileName);
-   const uploadTask = uploadBytesResumable(storageRef, file);
+  const navigate = useNavigate();
 
-   uploadTask.on('state_changed', (snapshot) => {
-    const progress = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-     setImageUploadProgress(progress.toFixed(0));
-       
-   },
-   (error) => {
-    setImageUploadError('Image upload failed');
-    setImageUploadProgress(null);
-  },
-  () => {
-    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-      setImageUploadProgress(null);
+  const handleUpdloadImage = async () => {
+    try {
+      if (!file) {
+        setImageUploadError('Please select an image');
+        return;
+      }
       setImageUploadError(null);
-      setFormData({ ...formData, image: downloadURL });
-    });
-  }
-);
-} 
-   
-   catch (error) {
-    setImageUploadError('image upload filed')
-    setImageUploadProgress(null)
-    console.log(error);
-    
-  }
-}
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + '-' + file.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setImageUploadProgress(progress.toFixed(0));
+        },
+        (error) => {
+          setImageUploadError('Image upload failed');
+          setImageUploadProgress(null);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setImageUploadProgress(null);
+            setImageUploadError(null);
+            setFormData({ ...formData, image: downloadURL });
+          });
+        }
+      );
+    } catch (error) {
+      setImageUploadError('Image upload failed');
+      setImageUploadProgress(null);
+      console.log(error);
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/post/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
 
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-try {
-  const res = await fetch('/api/post/create',{
-    method: 'POST',
-    headers:{
-      'Content-Type': "application/json"
-    },
-    body: JSON.stringify(formData ),
-  })
-  const data = await res.json();
-  if (!res.ok) {
-    setPublishError(data.message)
-    return;
-  }
-  if (res.ok) {
-    setPublishError(null)
-    navigate(`/posts`)
-  }
-} catch (error) {
-  
-}
-}
-
+      if (res.ok) {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+    } catch (error) {
+      setPublishError('Something went wrong');
+    }
+  };
 
 
   return (
