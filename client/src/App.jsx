@@ -10,6 +10,7 @@ import Projects from './pages/Projects'
 import Home from './pages/Home'
 import About from './pages/About'
 import UserPosts from './components/UserPosts'
+import UpdatePost from './pages/UpdatePost'
 
 export default function App() {
   
@@ -26,6 +27,7 @@ export default function App() {
      <Route path='/profile' element={<Profile/>} />
      <Route path='/create-post' element={<CreatePost/>}/>
      <Route path='/user-post' element={<UserPosts/>}/>
+     <Route path='/update-post/:postId' element={<UpdatePost/>}/>
     </Route>
   
    </Routes>
